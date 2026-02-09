@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
             <button onClick={() => {
                 navigate(`/movies/${movie._id}`)
             }} className='bg-primary font-semibold hover:bg-primary-dull px-2 py-1 rounded-full  '>Buy Ticket</button>
-            <span className='flex gap-1'><StarIcon className='h-5 w-5'/> {movie.vote_average.toFixed(1)} </span>
+            <span className='flex gap-1'><StarIcon fill='currentColor' className='h-5 text-primary w-5'/> {movie.vote_average.toFixed(1)} </span>
         </div>
      </div>
    )

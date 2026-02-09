@@ -1,9 +1,10 @@
 import React from 'react'
 import { assets } from '../assets/assets'
+import BlurBg from './BlurBg'
 
 const Footer = () => {
   return (
-    <footer className="px-6 mt-40 md:px-16 lg:px-36 w-full text-gray-300">
+    <footer className="relative px-6 mt-40 md:px-16 lg:px-36 w-full text-gray-300">
             <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-gray-500 pb-10">
                 <div className="md:max-w-96">
                     <img alt="" class="h-9" src={assets.logo} />
