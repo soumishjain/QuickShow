@@ -11,7 +11,7 @@ const Navbar = () => {
     const navigate = useNavigate()
   return (
     <div className='fixed z-50 max-md:px-6 max-md:py-4 px-20 py-8 w-full flex items-center justify-between max-md:justify-between gap-8'>
-        <Link>
+        <Link onClick={() => {scrollTo(0,0);}} to='/'>
         <img className='flex-1' src={assets.logo} alt="" />
         </Link>
 
