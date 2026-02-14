@@ -20,8 +20,8 @@ const MovieDetail = () => {
   },[id])
 
   return show ? (
-    <div className='mt-40 md:px-40 max-md:px-10'>
-      <BlurBg top='100px' left='500px'/>
+    <div className='mt-40 max-md:mt-30 md:px-40 max-md:px-10'>
+      <BlurBg top='100px' right='100px'/>
       <div className='flex max-md:flex-col max-sm:justify-center max-md:items-center max-md:gap-3 gap-10'>
       <img className='w-100 max-md:w-50 max-md:h-70 rounded-2xl' src={show.movie.poster_path} alt="" />
       <div className='flex flex-col py-10 justify-between'>
