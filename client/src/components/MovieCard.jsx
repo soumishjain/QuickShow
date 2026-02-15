@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
     const min = runtime % 60
     const navigate = useNavigate()
    return (
-     <div className='hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between h-88 w-68 bg-gray-800 rounded-2xl p-3'>
+     <div className='hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between h-92 w-68 bg-gray-800 rounded-2xl p-3'>
       <div>
          <img className='rounded-2xl object-cover object-center h-50' src={movie.backdrop_path} alt="" />
        <h3 className='text-xl mt-2 font-semibold'>{movie.title}</h3>
