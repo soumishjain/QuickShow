@@ -4,16 +4,20 @@ import { dummyDateTimeData, dummyShowsData } from '../assets/assets'
 import { Heart, PlayCircleIcon, StarIcon } from 'lucide-react'
 import BlurBg from '../components/BlurBg'
 import DateBox from '../components/DateBox'
+import MovieCard from '../components/MovieCard'
+import Loading from '../components/Loading'
 
 const MovieDetail = () => {
   const {id} = useParams()
   const [show,setShow] = useState(null)
   const getShow = async () => {
     const show = dummyShowsData.find(show => show._id === id)
-    setShow({
+    if(show){
+      setShow({
       movie : show,
       dateTime : dummyDateTimeData
     })
+    }
   }
   useEffect(() => {
     getShow()
@@ -63,9 +67,21 @@ const MovieDetail = () => {
     </div>
 
       <DateBox dateTime={show.dateTime} id={id}/>
+
+      <h3 className='font-semibold text-xl mt-40 max-md:text-md'>You Might Also Like</h3>
+      <div className='flex justify-between gap-4 mt-10 flex-wrap max-lg:justify-center'>
+        {dummyShowsData.slice(0,4).map((movie,index) => {
+          return <MovieCard key={index} movie={movie}/>
+        })}
+      </div>
+      <div className='w-full flex justify-center mt-20'>
+        <button onClick={() => {
+            navigate('/movies'); scrollTo(0,0)
+        }} className='bg-primary hover:bg-primary-dull px-4 py-2 rounded-md font-semibold'>Show more</button>
     </div>
+      </div>
   ) : (
-    <div>Loading...</div>
+    <Loading />
   )
 }
 
