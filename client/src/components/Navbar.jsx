@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { assets } from '../assets/assets'
 import { MenuIcon, SearchIcon, TicketPlus, XIcon } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
 
 const Navbar = () => {
@@ -18,11 +18,11 @@ const Navbar = () => {
         <div className={`max-md:absolute max-md:top-0 max-md:left-0 max-md:font-medium max-md:text-lg max-md:h-screen flex max-md:flex-col backdrop-blur transition-[width] duration-300 max-md:items-center max-md:justify-center gap-6 md:border border-gray-300/20 overflow-hidden bg-black/70 px-5 py-3 md:bg-white/10
           md:rounded-full  ${isOpen ? 'max-md:w-full' : 'max-md:w-0 max-md:-translate-x-full'}`}>
             <XIcon onClick={() => setIsOpen(false)} className='md:hidden max-md:absolute top-3 right-7'/>
-            <Link onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/'>Home</Link>
-            <Link onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/movies'>Movies</Link>
-            <Link onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/theatres'>Theatres</Link>
-            <Link onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/releases'>Releases</Link>
-            <Link onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/favourite'>Favourites</Link>
+            <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/'>Home</NavLink>
+            <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/movies'>Movies</NavLink>
+            <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/theatres'>Theatres</NavLink>
+            <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/releases'>Releases</NavLink>
+            <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/favourite'>Favourites</NavLink>
         </div>
 
         <div className='flex items-center gap-4'>
