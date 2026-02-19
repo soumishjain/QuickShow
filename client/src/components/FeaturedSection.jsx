@@ -9,7 +9,7 @@ const FeaturedSection = () => {
   const navigate = useNavigate()
     return (
     <div className='relative flex flex-col gap-15 overflow-hidden px-2 md:px-45 py-20'>
-        <BlurBg top='40' right=' 80px' />
+        <BlurBg top='40' left=' 80px' />
       <div className='flex justify-between'>
         <h3 className='font-semibold text-xl max-md:text-md'>Now Showing</h3>
         <span className='flex gap-3 cursor-pointer group'><span className='transition-transform duration-300  ease-in-out  group-hover:-translate-x-1'>View All</span> <ArrowRight className='transition-transform duration-300  ease-in-out group-hover:translate-x-1'/></span>
