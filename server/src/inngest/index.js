@@ -13,7 +13,7 @@ const syncUserCreation = inngest.createFunction(
         const userData = {
             _id : id,
             name : first_name + ' ' + last_name,
-            email : email_addresses[0].email_addresses,
+            email : email_addresses[0].email_address,
             image_url : image_url
         }
         await userModel.create(userData)
