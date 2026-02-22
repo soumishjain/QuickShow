@@ -1,5 +1,12 @@
 import app from './src/app.js'
+import { connectToDb } from './src/config/database.js'
 
-app.listen(3000,() => {
-    console.log("server is running on port http://localhost:3000")
-})
+const startServer = async () => {
+    await connectToDb()
+
+    app.listen(3000 , () => {
+        console.log("Server running on http://localhost:3000");
+    })
+}
+
+startServer()

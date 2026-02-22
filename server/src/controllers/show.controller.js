@@ -1,5 +1,6 @@
 import axios from 'axios'
 import movieModels from '../models/movie.models.js'
+import showModel from '../models/show.models.js'
 
 
 export const getNowPlayingMovies = async (req,res) => {
@@ -23,7 +24,7 @@ export const getNowPlayingMovies = async (req,res) => {
 export const addShow = async (req,res) => {
     try{
         const {movieId , showsInput,showPrice} = req.body
-        const movie = await movieModels.findbyId(movieId)
+        let movie = await movieModels.findOne({id : movieId})
         if(!movie){
         const [movieDetailsResponse,movieCreditsResponse] = await Promise.all(
             [
@@ -56,10 +57,68 @@ export const addShow = async (req,res) => {
         }
 
         movie = await movieModels.create(movieDetails)
-
         }
+
+        const showsToCreate = [];
+        showsInput.forEach(show => {
+            const showDate = show.date;
+            show.time.forEach((time) => {
+                const dateTimeString = `${showDate}T${time}`
+                showsToCreate.push({
+                    movie : movieId,
+                    showDateTime : new Date(dateTimeString),
+                    showPrice,
+                    occupiedSeats : {}
+                })
+            })
+        })
+
+        if(showsToCreate.length > 0){
+            await showModel.insertMany(showsToCreate)
+        }
+
+        res.json({success : true, message : "Show added successfully"})
+
     }catch(err){
          console.log(err)
+        res.json({success : false, message : err.message})
+    }
+}
+
+
+export const getShows = async (req,res) => {
+    try{
+        const shows = await showModel.find({showDateTime : {$gte : new Date()}}).populate('movie').sort({showDateTime : 1})
+
+        const uniqueShows = new Set((shows.map(show => show.movie)))
+
+        res.json({success : true , shows : Array.from(uniqueShows)})
+
+    }catch(err){
+        console.error(err)
+        res.json({success : false, message : err.message})
+    }
+}
+
+export const getShow = async (req,res) => {
+    try{
+        const {movieId} = req.params;
+        const shows = await showModel.find({movie : movieId, showDateTime : {$gte : new Date()}})
+
+        const movie = await movieModels.findOne({id : movieId})
+        const dateTime = {}
+        shows.forEach(show => {
+            const date = show.showDateTime.toISOString().split("T")[0];
+            if(!dateTime[date]) {
+                dateTime[date] = []
+            }
+
+            dateTime[date].push({time : show.showDateTime, showId : show.id})
+
+        })
+        res.json({success : true , movie, dateTime})
+    }catch(err){
+console.error(err)
         res.json({success : false, message : err.message})
     }
 }
