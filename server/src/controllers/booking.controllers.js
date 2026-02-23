@@ -1,4 +1,4 @@
-import bookingModel from "../models/booking,models.js";
+import bookingModel from "../models/booking.models.js";
 import showModel from "../models/show.models.js";
 
 export const checkSeatAvailability = async(showId , selectedSeats) => {
@@ -8,7 +8,7 @@ export const checkSeatAvailability = async(showId , selectedSeats) => {
 
         const ouccpiedSeats = showData.occupiedSeats
 
-        const isAnySeatTaken = selectedSeats.some(seat => occupiedSeats[seat]);
+        const isAnySeatTaken = selectedSeats.some(seat => ouccpiedSeats[seat]);
 
         return !isAnySeatTaken
     } catch(error){

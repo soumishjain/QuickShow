@@ -17,11 +17,13 @@ export const AppProvider = ({children}) => {
     const [shows,setShows] = useState([])
     const [favoritesMovies,setFavoritesMovies] = useState([])
 
-    const user = useUser()
+    const image_base_url = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
+
+    const {user} = useUser()
     const {getToken} = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
-
+ 
     const fetchIsAdmin = async () => {
         try{
             const {data} = await axios.get('/api/admin/is-admin',{headers: {Authorization : `Bearer ${await getToken()}`}})
@@ -85,7 +87,7 @@ export const AppProvider = ({children}) => {
         axios,
         fetchIsAdmin,
         user,getToken,navigate,isAdmin,shows,
-        favoritesMovies,fetchFavMovies
+        favoritesMovies,fetchFavMovies, image_base_url
     }
 
     return (

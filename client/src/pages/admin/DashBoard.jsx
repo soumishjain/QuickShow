@@ -5,10 +5,14 @@ import BlurBg from '../../components/BlurBg'
 import { dummyDashboardData } from '../../assets/assets'
 import Loading from '../../components/Loading'
 import formatDate from '../../lib/isoDateFormat'
+import { useAppContext } from '../../context/AppContext'
+import toast from 'react-hot-toast'
 
 const DashBoard = () => {
 
     const currency = import.meta.env.VITE_CURRENCY
+
+    const {axios , getToken , user, image_base_url} = useAppContext()
 
     const [dashboardData, setdashBoardData] = useState({
         totalBookings: 0,
@@ -27,13 +31,25 @@ const DashBoard = () => {
     ]
 
     const fetchDashboardData = async () => {
-        setdashBoardData(dummyDashboardData)
-        setLoading(false)
+       try{
+        const {data} = await axios.get("/api/admin/dashboard" , {headers : {Authorization : `Bearer ${await getToken()}`}})
+
+        if(data.success) {
+            setdashBoardData(data.dashboardData)
+            setLoading(false)
+        }else{
+            toast.error(data.message)
+        }
+       }catch(error){
+        toast.error("Error fetching dashboard data: ", error)
+       }
     }
 
     useEffect(() => {
-        fetchDashboardData();
-    }, []);
+        if(user){
+        fetchDashboardData();            
+        }
+    }, [user]);
 
     return !loading ? (
         <div className='flex flex-col gap-10'>
@@ -55,7 +71,7 @@ const DashBoard = () => {
             <div className='flex flex-wrap gap-5'>
                 {dashboardData.activeShows.map(show => (
                     <div className='w-60 hover:-translate-y-2 transition-all duration-100 rounded-lg border bg-primary/8 border-primary/20'>
-                        <img className='w-full h-70 object-cover rounded-t-lg ' src={show.movie.poster_path} alt="" />
+                        <img className='w-full h-70 object-cover rounded-t-lg ' src={image_base_url + show.movie.poster_path} alt="" />
                         <div className='px-3 py-2 flex flex-col gap-2'>
                             <h1 className='font-semibold text-lg'>{show.movie.title}</h1>
                             <div className='flex justify-between items-center'>

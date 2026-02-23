@@ -1,4 +1,4 @@
-import bookingModel from "../models/booking,models.js";
+import bookingModel from "../models/booking.models.js";
 import showModel from "../models/show.models.js";
 import userModel from "../models/user.models.js";
 
@@ -16,7 +16,7 @@ export const getDashboardData = async (req,res) => {
 
         const dashboardData = {
             totalBookings : bookings.length,
-            totalRevenue : bookingModel.reduce((acc,booking) => acc + booking.amount , 0),
+            totalRevenue : bookings.reduce((acc,booking) => acc + booking.amount , 0),
             activeShows,
             totalUser
         }

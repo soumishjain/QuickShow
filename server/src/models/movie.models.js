@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const movieSchema = new mongoose.Schema(
     {
-        id : {type : String, required: true},
+        id : {type : String, required: true , unique: true},
         title : {type : String, required: true},
         overview : {type : String, required: true},
         poster_path : {type : String, required: true},
@@ -13,6 +13,7 @@ const movieSchema = new mongoose.Schema(
         genres : {type : Array, required: true},
         casts : {type : Array, required: true},
         runtime : {type : Number, required: true},
+        vote_average: { type: Number, default: 0 }
     } , {timestamps : true}
 )
 

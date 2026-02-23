@@ -1,5 +1,5 @@
 import { clerkClient } from "@clerk/express"
-import bookingModel from "../models/booking,models.js"
+import bookingModel from "../models/booking.models.js"
 import movieModels from "../models/movie.models.js"
 
 export const getUserBookings = async(req,res) => {
