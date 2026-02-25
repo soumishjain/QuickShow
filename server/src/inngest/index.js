@@ -82,23 +82,36 @@ const sendBookingConfirmationEmail = inngest.createFunction(
     {id : "send-booking-confirmation-email"},
     {event : "app/show.booked"},
     async ({event , step}) => {
+
+        try{
         const {bookingId} = event.data
 
         const booking = await bookingModel.findById(bookingId).populate({
             path: 'show',
-            populate : {path : "movie" , model : "Movie"}
-        }).populate('user')
+            populate : {path : "movie"}
+        })
+
+       if (!booking) {
+        console.log("Booking not found");
+        return;
+      }
+
+const user = await userModel.findOne({id : booking.user})
+if (!user) {
+        console.log("User not found");
+        return;
+      }
 
         await sendEmail({
-            to : booking.user.email,
-            subject : `Payment Confirmation: "${booking.show.movie.title}" booked!`,
+            to : user.email,
+            subject : `Payment Confirmation: "${booking.show?.movie?.title}" booked!`,
             body : `<div style="max-width:500px; margin:auto; background:#ffffff; padding:20px; border-radius:8px;">
     
     <h2 style="margin-top:0;">🎬 Booking Confirmed</h2>
     
-    <p>Hi ${booking.user.name},</p>
+    <p>Hi ${user.name},</p>
     
-    <p>Your ticket for <strong>${booking.show.movie.title}</strong> is confirmed.</p>
+    <p>Your ticket for <strong>${booking.show?.movie?.title}</strong> is confirmed.</p>
     
     <p>
       📅 Date: ${new Date(booking.show.showDateTime).toLocaleDateString('en-US', {
@@ -115,6 +128,10 @@ const sendBookingConfirmationEmail = inngest.createFunction(
 
   </div>`
         })
+        console.log("Email sent Successfully")
+    }catch(error){
+        onsole.error("Email function crash:", error);
+    }
     }
 )
 
