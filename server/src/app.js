@@ -20,7 +20,7 @@ app.use(cors({
 connectToDb()
 
 
-app.use('/api/stripe' , express.raw({type : 'application/json'}), stripeWebhooks)
+app.use('/api/stripe' , express.json(), stripeWebhooks)
 
 
 app.use(express.json())
