@@ -2,6 +2,7 @@ import { Inngest } from "inngest";
 import userModel from "../models/user.models.js";
 import showModel from "../models/show.models.js";
 import bookingModel from "../models/booking.models.js";
+import sendEmail from "../config/nodemailer.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "movie-ticket-booking" });
@@ -77,9 +78,51 @@ const releastSeatsAndDeleteBooking = inngest.createFunction(
 )
 
 
+const sendBookingConfirmationEmail = inngest.createFunction(
+    {id : "send-booking-confirmation-email"},
+    {event : "app/show.booked"},
+    async ({event , step}) => {
+        const {bookingId} = event.data
+
+        const booking = await bookingModel.findById(bookingId).populate({
+            path: 'show',
+            populate : {path : "movie" , model : "Movie"}
+        }).populate('user')
+
+        await sendEmail({
+            to : booking.user.email,
+            subject : `Payment Confirmation: "${booking.show.movie.title}" booked!`,
+            body : `<div style="max-width:500px; margin:auto; background:#ffffff; padding:20px; border-radius:8px;">
+    
+    <h2 style="margin-top:0;">🎬 Booking Confirmed</h2>
+    
+    <p>Hi ${booking.user.name},</p>
+    
+    <p>Your ticket for <strong>${booking.show.movie.title}</strong> is confirmed.</p>
+    
+    <p>
+      📅 Date: ${new Date(booking.show.showDateTime).toLocaleDateString('en-US', {
+        timeZone : 'Asia/Kolkata'
+      })}<br>
+      ⏰ Time: ${new Date(booking.show.showDateTime).toLocaleTimeString('en-US', {
+        timeZone : 'Asia/Kolkata'
+      })}<br>
+    </p>
+
+    <p style="font-size:12px; color:#777;">
+      Please arrive 15 minutes before showtime.
+    </p>
+
+  </div>`
+        })
+    }
+)
+
+
 export const functions = [
     syncUserCreation,
     syncUserDeletion,
     syncUserUpdation,
-    releastSeatsAndDeleteBooking
+    releastSeatsAndDeleteBooking,
+    sendBookingConfirmationEmail
 ];

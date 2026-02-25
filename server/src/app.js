@@ -25,7 +25,7 @@ app.use('/api/stripe' , express.json(), stripeWebhooks)
 app.use(express.json())
 
 app.use('/api/inngest', serve({client : inngest,functions}))
-app.use(clerkMiddleware())
+app.use(clerkMiddleware()) 
 app.use('/api/show',showRouter)
 
 app.use('/api/bookings',bookingRouter)

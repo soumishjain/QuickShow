@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import bookingModel from "../models/booking.models.js";
+import { inngest } from "../inngest/index.js";
 
 const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -37,6 +38,11 @@ export const stripeWebhooks = async (req, res) => {
         isPaid: true,
         paymentLink: "",
       });
+
+      await inngest.send({
+        name : "app/show.booked",
+        data : {bookingId}
+      })
 
       console.log("Booking updated:", bookingId);
     }
