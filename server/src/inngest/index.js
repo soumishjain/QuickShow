@@ -28,7 +28,7 @@ const syncUserDeletion = inngest.createFunction(
     {event : 'clerk/user.deleted'},
     async ({event}) => {
         const {id} = event.data
-        await userModel.findByOneAndDelete({id : id})
+        await userModel.findOneAndDelete({id})
     }
 )
 
@@ -44,7 +44,7 @@ const syncUserUpdation = inngest.createFunction(
             email : email_addresses[0].email_address,
             image_url : image_url
         }
-        await userModel.findByIdAndUpdate(id,userData)
+        await userModel.findOneAndUpdate({id},userData)
     }
 )
 
@@ -59,7 +59,7 @@ const releastSeatsAndDeleteBooking = inngest.createFunction(
             const bookingId = event.data.bookingId;
             const booking = await bookingModel.findById(bookingId)
 
-
+            if (!booking) return;
             if(!booking.isPaid){
                 const show = await showModel.findById(booking.show)
                 booking.bookedSeats.forEach((seat) => {
