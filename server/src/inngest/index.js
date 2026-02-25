@@ -41,7 +41,7 @@ const syncUserUpdation = inngest.createFunction(
         const userData = {
             id : id,
             name : first_name + ' ' + last_name,
-            email : email_addresses[0].email_addresses,
+            email : email_addresses[0].email_address,
             image_url : image_url
         }
         await userModel.findByIdAndUpdate(id,userData)
@@ -50,14 +50,14 @@ const syncUserUpdation = inngest.createFunction(
 
 const releastSeatsAndDeleteBooking = inngest.createFunction(
     {id : 'release-seats-delete-booking'},
-    {evenet : "app/checkpayment"},
+    {event : "app/checkpayment"},
     async({event , step}) => {
         const tenMinLater = new Date(Date.now() + 10 * 60 * 1000)
         await step.sleepUntil('wait-for-10-minutes', tenMinLater)
 
         await step.run('check-payment-status', async() => {
             const bookingId = event.data.bookingId;
-            const booking = await bookingId.findById(bookingId)
+            const booking = await bookingModel.findById(bookingId)
 
 
             if(!booking.isPaid){
