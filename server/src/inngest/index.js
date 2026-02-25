@@ -3,7 +3,6 @@ import userModel from "../models/user.models.js";
 import showModel from "../models/show.models.js";
 import bookingModel from "../models/booking.models.js";
 import sendEmail from "../config/nodemailer.js";
-import { message } from "statuses";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "movie-ticket-booking" });
