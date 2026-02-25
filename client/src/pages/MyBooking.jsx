@@ -4,6 +4,7 @@ import BlurBg from '../components/BlurBg'
 import isoTimeFormat from '../lib/isoTimeFormat'
 import formatDate from '../lib/isoDateFormat'
 import { useAppContext } from '../context/AppContext'
+import { Link } from 'react-router-dom'
 
 const MyBooking = () => {
   const [myBookings,setMyBookings] = useState([])
@@ -51,7 +52,7 @@ const MyBooking = () => {
               <div className='flex gap-2 flex-col items-end justify-center '>
                 <div className='flex items-center gap-2'>
                   <h1 className='text-2xl max-md:text-lg font-bold'>${booking.amount}</h1>
-                  {booking.isPaid === false ? <button className='flex px-4 font-semibold py-1 items-center text-sm bg-primary hover:bg-primary-dull transition rounded-full cursor-pointer'>Pay Now</button> : <></>}
+                  {booking.isPaid === false ? <Link to={booking.paymentLink} className='flex px-4 font-semibold py-1 items-center text-sm bg-primary hover:bg-primary-dull transition rounded-full cursor-pointer'>Pay Now</Link> : <></>}
                 </div>
               <p className='flex text-white/30 text-sm'><span>Total Tickets: </span>{booking.bookedSeats.length}</p>
               <p className='flex text-white/30 text-sm'><span>Seat Number: </span>{booking.bookedSeats.map((seats,idx) => (

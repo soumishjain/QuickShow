@@ -1,6 +1,6 @@
 import bookingModel from "../models/booking.models.js";
 import showModel from "../models/show.models.js";
-import Stripe from 'stripe'
+import stripe from 'stripe'
 
 
 export const checkSeatAvailability = async(showId , selectedSeats) => {
@@ -59,7 +59,7 @@ export const createBooking = async (req,res) => {
 
         await showData.save()
 
-        const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
+        const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY)
 
         const line_items = [{
             price_data : {
@@ -83,7 +83,7 @@ export const createBooking = async (req,res) => {
             expires_at : Math.floor(Date.now() / 1000) + 30 * 60,
         })
 
-        booking.paymentLink = session.cancel_url
+        booking.paymentLink = session.url
         await booking.save()
 
         res.json({success : true , url : session.url})
