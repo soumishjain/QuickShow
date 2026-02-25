@@ -130,7 +130,7 @@ if (!user) {
         })
         console.log("Email sent Successfully")
     }catch(error){
-        onsole.error("Email function crash:", error);
+        console.error("Email function crash:", error);
     }
     }
 )
