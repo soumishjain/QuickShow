@@ -1,14 +1,19 @@
 import bookingModel from "../models/booking.models.js";
 import showModel from "../models/show.models.js";
+import Stripe from 'stripe'
+
 
 export const checkSeatAvailability = async(showId , selectedSeats) => {
     try{
-        const showData = await showModel.find({id : showId})
-        if(!showData) return false;
+        const showData = await showModel.findById(showId)
+        if (!showData) {
+  console.log("Show not found for ID:", showId);
+  return false;
+}
 
-        const ouccpiedSeats = showData.occupiedSeats
+        const occupiedSeats = showData.occupiedSeats || {}
 
-        const isAnySeatTaken = selectedSeats.some(seat => ouccpiedSeats[seat]);
+        const isAnySeatTaken = selectedSeats.some(seat => occupiedSeats[seat]);
 
         return !isAnySeatTaken
     } catch(error){
@@ -29,10 +34,18 @@ export const createBooking = async (req,res) => {
 
         }
 
-        const showData = await showModel.findOne({id : showId}).populate('movie')
+        const showData = await showModel.findById(showId).populate('movie')
+
+        if (!showData) {
+  return res.json({
+    success: false,
+    message: "Show not found"
+  });
+}
 
         const booking = await bookingModel.create({
             user : userId,
+            movie : showData.movie._id,
             show : showId,
             amount : showData.showPrice * selectedSeats.length,
             bookedSeats : selectedSeats
@@ -46,11 +59,38 @@ export const createBooking = async (req,res) => {
 
         await showData.save()
 
-        res.json({success : true , message : 'booked Successfully'})
+        const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+        const line_items = [{
+            price_data : {
+                currency : 'usd',
+                product_data : {
+                    name : showData.movie.title
+                },
+                unit_amount : Math.floor(booking.amount) * 100
+            },
+            quantity: 1
+        }]
+
+        const session = await stripeInstance.checkout.sessions.create({
+            success_url : `${origin}/loading/my-bookings`,
+            cancel_url : `${origin}/my-bookings`,
+            line_items : line_items,
+            mode : 'payment',
+            metadata : {
+                bookingId : booking._id.toString()
+            },
+            expires_at : Math.floor(Date.now() / 1000) + 30 * 60,
+        })
+
+        booking.paymentLink = session.cancel_url
+        await booking.save()
+
+        res.json({success : true , url : session.url})
 
     }catch(err){
         console.log(err.message)
-        Response.json({success : false, message : error.messaege})
+        res.json({success : false, message : err.messaege})
 
     }
 }
@@ -58,12 +98,19 @@ export const createBooking = async (req,res) => {
 export const getOccupiedSeats = async(req,res) => {
     try{
         const {showId} = req.params
-        const showData = await showModel.findOne({id : showId})
+        const showData = await showModel.findById(showId)
 
-        const occupiedSeats = Object.keys(showData.occupiedSeats)
+        if(!showData){
+            return res.json({
+                success : false,
+                message : "Show not found"
+            })
+        }
 
-        res.jaon({success : true, occupiedSeats})
+        const occupiedSeats = Object.keys(showData.occupiedSeats || {})
+
+        res.json({success : true, occupiedSeats})
     }catch(error){
-        console.log(err.message)
+        console.log(error.message)
     }
 }

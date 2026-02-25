@@ -7,17 +7,17 @@ const bookingSchema = new mongoose.Schema({
         ref : 'user'
     },
     movie : {
-        type : String,
+        type : mongoose.Schema.Types.ObjectId,
         required : true,
         ref : 'movie'
     },
     show : {
-        type : String,
+        type : mongoose.Schema.Types.ObjectId,
         required : true,
         ref : 'show'
     },
     bookedSeats : {
-        type: Array,
+        type: [String],
         required : true
     },
     amount : {

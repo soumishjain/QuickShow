@@ -103,9 +103,14 @@ export const getShows = async (req,res) => {
 export const getShow = async (req,res) => {
     try{
         const {movieId} = req.params;
-        const shows = await showModel.find({movie : movieId, showDateTime : {$gte : new Date()}})
-
         const movie = await movieModels.findOne({id : movieId})
+
+        if(!movie) {
+            return res.json({success : false, message : "movie not found"})
+        }
+
+        const shows = await showModel.find({movie : movie._id, showDateTime : {$gte : new Date()}})
+
         const dateTime = {}
         shows.forEach(show => {
             const date = show.showDateTime.toISOString().split("T")[0];
@@ -113,7 +118,7 @@ export const getShow = async (req,res) => {
                 dateTime[date] = []
             }
 
-            dateTime[date].push({time : show.showDateTime, showId : show.id})
+            dateTime[date].push({time : show.showDateTime, showId : show._id})
 
         })
         res.json({success : true , movie, dateTime})

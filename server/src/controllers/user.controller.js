@@ -24,18 +24,15 @@ export const updateFavorite = async (req,res) => {
         const userId = req.auth().userId
         const user = await clerkClient.users.getUser(userId)
 
-        if(!user.privateMetadata.favorites){
-            user.privateMetadata.favorites = []
-        }
+        let favorites = user.privateMetadata?.favorites || []
 
-        if(!user.privateMetadata.favorites.includes(movieId)){
-            user.privateMetadata.favorites.push(movieId)
+        if(!favorites.includes(movieId)){
+            favorites = [...favorites , movieId]
         }else{
-            user.privateMetadata.favorites = user.privateMetadata.favorites.filter(item => item !== movieId)
+           favorites = favorites.filter(item => item !== movieId)
         }
 
-
-        await clerkClient.users.updateUserMetadata(userId , {privateMetadata : user.privateMetadata})
+        await clerkClient.users.updateUserMetadata(userId , {privateMetadata : {...user.privateMetadata,favorites}})
 
         res.json({success : true , message : "Favorite updated Successfully"})
 
