@@ -39,12 +39,14 @@ export const stripeWebhooks = async (req, res) => {
         paymentLink: "",
       });
 
+      console.log("Booking updated in DB:", bookingId);
+
       await inngest.send({
         name : "app/show.booked",
         data : {bookingId}
       })
 
-      console.log("Booking updated:", bookingId);
+      console.log("Inngest event sent:", bookingId);
     }
 
     res.json({ received: true });

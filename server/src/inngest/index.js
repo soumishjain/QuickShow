@@ -85,6 +85,11 @@ const sendBookingConfirmationEmail = inngest.createFunction(
 
         try{
         const {bookingId} = event.data
+        
+        
+        console.log("Email function trggered for booking: ",bookingId)
+        
+
 
         const booking = await bookingModel.findById(bookingId).populate({
             path: 'show',

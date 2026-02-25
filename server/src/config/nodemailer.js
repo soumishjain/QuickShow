@@ -16,6 +16,9 @@ const sendEmail = async({to , subject , body}) => {
         subject,
         html: body,
     })
+    console.log("SMTP USER:", process.env.SMTP_USER);
+console.log("SMTP PASS exists:", !!process.env.SMTP_PASSWORD);
+console.log("SENDER:", process.env.SENDER_EMAIL);
     return response
 }
 
