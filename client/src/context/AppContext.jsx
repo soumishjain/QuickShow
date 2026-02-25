@@ -57,7 +57,8 @@ export const AppProvider = ({children}) => {
 
     const fetchFavMovies = async ()=> {
         try{
-            const {data} = await axios.get('/api/user/favorites',{headers : {Authorization: `Bearer ${await getToken()}`}})
+            const {data} = await axios.get('/api/user/get-favorite',{headers : {Authorization: `Bearer ${await getToken()}`}})
+            console.log(data.movies)
 
             if(data.success){
                 setFavoritesMovies(data.movies)
