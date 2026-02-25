@@ -1,5 +1,7 @@
 import { Inngest } from "inngest";
 import userModel from "../models/user.models.js";
+import showModel from "../models/show.models.js";
+import bookingModel from "../models/booking.models.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "movie-ticket-booking" });
@@ -46,9 +48,38 @@ const syncUserUpdation = inngest.createFunction(
     }
 )
 
+const releastSeatsAndDeleteBooking = inngest.createFunction(
+    {id : 'release-seats-delete-booking'},
+    {evenet : "app/checkpayment"},
+    async({event , step}) => {
+        const tenMinLater = new Date(Date.now() + 10 * 60 * 1000)
+        await step.sleepUntil('wait-for-10-minutes', tenMinLater)
+
+        await step.run('check-payment-status', async() => {
+            const bookingId = event.data.bookingId;
+            const booking = await bookingId.findById(bookingId)
+
+
+            if(!booking.isPaid){
+                const show = await showModel.findById(booking.show)
+                booking.bookedSeats.forEach((seat) => {
+                    delete show.occupiedSeats[seat]
+                });
+                show.markModified('occupiedSeats')
+
+                await show.save()
+                await bookingModel.markModified('occupiedSeats')
+                await show.save()
+                await bookingModel.findByIdAndDelete(booking._id)
+            }
+        })
+    }
+)
+
 
 export const functions = [
     syncUserCreation,
     syncUserDeletion,
-    syncUserUpdation
+    syncUserUpdation,
+    releastSeatsAndDeleteBooking
 ];
