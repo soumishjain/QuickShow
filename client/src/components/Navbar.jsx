@@ -29,7 +29,6 @@ const Navbar = () => {
         </div>
 
         <div className='flex items-center gap-4'>
-        <SearchIcon className='max-md:hidden' />
         {
             !user ? (
                 <button onClick={openSignIn} className='bg-primary px-4 py-1 hover:bg-primary-dull font-semibold cursor-pointer rounded-full px-'>Login</button>

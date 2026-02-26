@@ -116,8 +116,9 @@ console.log("Sending showId:", selectedTime?.showId)
   },[selectedTime])
 
   return show ? (
-    <div className='flex flex-col gap-5 md:flex-row px-6 md:px-16 lg:px-40 py-30 md:pt-50'>
-      <div className='flex flex-col gap-5 border border-primary/20 rounded-lg h-max w-60 max-md:w-full max-md:py-5 py-10 bg-primary/20'>
+    <div className='overflow-x-auto scroll-smooth'>
+      <div className='min-w-[1100px] flex gap-5 px-6 py-30'>
+      <div className='flex flex-col gap-5 border border-primary/20 rounded-lg h-max w-60 py-10 bg-primary/20'>
           <p className='text-lg max-md:text-center font-semibold px-6'>Available Timings</p>
           <div className='mt-5 max-md:mt-0 max-md:justify-center max-md:flex space-y-1'>
             {show.dateTime[date].map((item) => (
@@ -136,7 +137,7 @@ console.log("Sending showId:", selectedTime?.showId)
         <p className='text-sm mb-6 text-gray-400'>Screen This Side</p>
 
           <div className='flex flex-col items-center mt-10 text-xs text-gray-300'>
-            <div className='grid grid-cols-2 md:grid-cols-1 gap-8 md:gap-2 mb-6'>
+            <div className='grid grid-cols-1 gap-8 mb-6'>
               {groupRows[0].map(row => renderSeats(row))}
             </div>
 
@@ -153,6 +154,8 @@ console.log("Sending showId:", selectedTime?.showId)
 
       </div>
     </div>
+    </div>
+    
   ) : (<Loading />)
 }
 
