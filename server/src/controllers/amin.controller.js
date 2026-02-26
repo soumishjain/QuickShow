@@ -47,10 +47,22 @@ export const getAllShows = async (req,res) => {
 
 export const getAllBookings = async(req,res) => {
     try{
-        const bookings = await bookingModel.find({}).populate('user').populate({
+        const bookings = await bookingModel.find({}).populate({
             path : 'show',
             populate: {path: "movie"}
         }).sort({createdAt: -1})
+
+        const userIds = bookings.map(b => b.user)
+
+        const users = await userModel.find({id : {$in : userIds}})
+
+        const bookingWithUser = bookings.map(booking => {
+            const user = users.find(u => u.id === booking.user)
+            return {
+                ...booking._doc,
+                user : user || null
+            }
+        })
 
         res.json({success : true , bookings})
     } catch(error){

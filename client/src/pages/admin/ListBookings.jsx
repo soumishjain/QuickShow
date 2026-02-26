@@ -19,7 +19,7 @@ const ListBookings = () => {
       const {data} = await axios.get('/api/admin/all-bookings', {
         headers : {Authorization: `Bearer ${await getToken()}`}
       })
-      setBookings(data.bookings)
+      setBookings(data.bookings || [])
     }catch(error){
       console.error(error)   
     }

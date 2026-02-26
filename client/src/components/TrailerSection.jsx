@@ -1,10 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { assets, dummyTrailers } from '../assets/assets'
 import BlurBg from './BlurBg'
 import ReactPlayer from 'react-player'
 import { PlayCircleIcon } from 'lucide-react'
+import axios from 'axios'
 const TrailerSection = () => {
-    const [currentTrailer , setCurrentTrailer] = useState(dummyTrailers[0])
+
+    const [trailers,setTrailers] = useState([]) 
+    const [currentTrailer , setCurrentTrailer] = useState(null)
+
+
+    useEffect(() => {
+        const fetchTrailers = async() => {
+            const {data} = await axios.get('/api/show/home-trailers')
+            console.log(data)
+            if(data.success){
+                setTrailers(data.trailers)
+                setCurrentTrailer(data.trailers[0])
+            }
+        }
+        fetchTrailers()
+    },[])
+
+    if(!currentTrailer) return null
+
   return (
     <div className='relative gap-4 mt-5 py-5 max-md:px-10  md:px-65 max-md:h-[400px] h-[800px] w-full flex flex-col items-center'>
     <BlurBg top='-50px' right='50px'/>
@@ -13,7 +32,7 @@ const TrailerSection = () => {
     </div>
     <ReactPlayer className='' height={'100%'} width={'100%'} src={currentTrailer.videoUrl} controls />
     <div className='group justify-center flex-wrap flex gap-4'>
-        {dummyTrailers.map((trailer) => (
+        {trailers.map((trailer) => (
             <div onClick={() => {
                 setCurrentTrailer(trailer)
             }} className='hover:-translate-y-1  duration-300 relative w-50 max-md:w-30 rounded-xl group-hover:not-hover:opacity-50 transition-all'>

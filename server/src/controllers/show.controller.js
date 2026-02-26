@@ -147,3 +147,48 @@ console.error(err)
         res.json({success : false, message : err.message})
     }
 }
+
+export const getHomeTrailers = async(req,res) => {
+    try{
+
+        const {data} = await axios.get(`https://api.themoviedb.org/3/movie/now_playing`,{
+            headers: {
+          Authorization: `Bearer ${process.env.TMDB_API_KEY}`
+        }
+        })
+
+        const movies = data.results.slice(0,5)
+
+        const trailers = await Promise.all(
+            movies.map(async(movie) =>{
+                const videoRes = await axios.get(
+                    `https://api.themoviedb.org/3/movie/${movie.id}/videos`,{
+                        headers : {
+                            Authorization : `Bearer ${process.env.TMDB_API_KEY}`
+                        }
+                    }
+                )
+
+                const trailer = videoRes.data.results.find(
+                    v => v.type === "Trailer" && v.site === "YouTube"
+                )
+
+                if(!trailer) return null
+                
+                return {
+                    id : movie.id,
+                    title : movie.title,
+                    videoUrl : `https://www.youtube.com/watch?v=${trailer.key}`,
+                    image: `https://img.youtube.com/vi/${trailer.key}/mqdefault.jpg`
+                }
+            } )
+
+        )
+        res.json({
+            success : true,
+            trailers : trailers.filter(Boolean)
+        })
+    }catch(error){
+        console.log(error)
+    }
+}
