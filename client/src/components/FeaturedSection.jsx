@@ -15,7 +15,9 @@ const FeaturedSection = () => {
         <BlurBg top='40' left=' 80px' />
       <div className='flex justify-between'>
         <h3 className='font-semibold text-xl max-md:text-md'>Now Showing</h3>
-        <span className='flex gap-3 cursor-pointer group'><span className='transition-transform duration-300  ease-in-out  group-hover:-translate-x-1'>View All</span> <ArrowRight className='transition-transform duration-300  ease-in-out group-hover:translate-x-1'/></span>
+        <button onClick={() => {
+            navigate('/movies'); scrollTo(0,0)
+        }} className='flex gap-3 cursor-pointer group'><span className='transition-transform duration-300  ease-in-out  group-hover:-translate-x-1'>View All</span> <ArrowRight className='transition-transform duration-300  ease-in-out group-hover:translate-x-1'/></button>
       </div>
       <div className='flex gap-4 flex-wrap max-lg:justify-center'>
         {shows.slice(0,4).map((show) => (

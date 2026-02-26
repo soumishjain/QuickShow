@@ -27,7 +27,7 @@ const DateBox = ({dateTime , id}) => {
             <ChevronLeftIcon width={28}/>
             <span className='flex gap-6'>
                 {Object.keys(dateTime).map((date) => {
-                   return <button onClick={() => setSelected(date)} className={`flex h-14 w-14 aspect-square items-center justify-center rounded flex-col ${selected === date ? 'bg-primary text-white' : 'border-primary/70 border'}`}>
+                   return <button onClick={() => setSelected(date)} className={`flex cursor-pointer hover:bg-black/20 transition duration-100 h-14 w-14 aspect-square items-center justify-center rounded flex-col ${selected === date ? 'bg-primary text-white' : 'border-primary/70 border'}`}>
                         <span>{new Date(date).getDate()}</span>
                     <span>{new Date(date).toLocaleDateString("en-US",{month : "short"})}</span>
                     </button>
@@ -37,7 +37,7 @@ const DateBox = ({dateTime , id}) => {
             <ChevronRightIcon width={28}/>
         </div>
       </div>
-      <button onClick={bookHandler} className='bg-primary hover:bg-primary-dull px-4 py-2 rounded-md font-semibold' href="">Buy Tickets</button>
+      <button onClick={bookHandler} className='bg-primary cursor-pointer hover:bg-primary-dull px-4 py-2 rounded-md font-semibold' href="">Buy Tickets</button>
     </div>
     </div>
   )

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { dummyDateTimeData, dummyShowsData } from '../assets/assets'
 import { Heart, PlayCircleIcon, StarIcon } from 'lucide-react'
 import BlurBg from '../components/BlurBg'
@@ -13,6 +13,8 @@ const MovieDetail = () => {
   const {id} = useParams()
   const [movie, setMovie] = useState(null)
   const [dateTime, setDateTime] = useState({})
+
+  const navigate = useNavigate()
 
   const {shows,axios,getToken,user,fetchFavMovies,favoritesMovies,image_base_url} = useAppContext()
 
@@ -106,7 +108,7 @@ const MovieDetail = () => {
       <div className='w-full flex justify-center mt-20'>
         <button onClick={() => {
             navigate('/movies'); scrollTo(0,0)
-        }} className='bg-primary hover:bg-primary-dull px-4 py-2 rounded-md font-semibold'>Show more</button>
+        }} className='bg-primary cursor-pointer hover:bg-primary-dull px-4 py-2 rounded-md font-semibold'>Show more</button>
     </div>
       </div>
   ) : (
