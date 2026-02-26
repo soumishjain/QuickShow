@@ -16,6 +16,7 @@ export const AppProvider = ({children}) => {
     const [isAdmin , setIsAdmin] = useState(false)
     const [shows,setShows] = useState([])
     const [favoritesMovies,setFavoritesMovies] = useState([])
+    const [upcoming,setUpcoming] = useState([])
 
     const image_base_url = import.meta.env.VITE_TMDB_IMAGE_BASE_URL
 
@@ -55,6 +56,19 @@ export const AppProvider = ({children}) => {
         }
     }
 
+    const fetchUpcomingMovies = async () => {
+        try{
+            const {data} = await axios.get('/api/show/upcoming')
+            if(data.success){
+                setUpcoming(data.movies)
+            }else{
+                toast.error(data.message)
+            }
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     const fetchFavMovies = async ()=> {
         try{
             const {data} = await axios.get('/api/user/get-favorite',{headers : {Authorization: `Bearer ${await getToken()}`}})
@@ -72,7 +86,8 @@ export const AppProvider = ({children}) => {
     }
 
     useEffect(() => {
-        fetchShows()
+        fetchShows(),
+        fetchUpcomingMovies()
     },[])
 
 
@@ -88,7 +103,7 @@ export const AppProvider = ({children}) => {
         axios,
         fetchIsAdmin,
         user,getToken,navigate,isAdmin,shows,
-        favoritesMovies,fetchFavMovies, image_base_url
+        favoritesMovies,fetchFavMovies, image_base_url,upcoming,fetchUpcomingMovies
     }
 
     return (

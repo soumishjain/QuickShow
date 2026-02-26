@@ -17,6 +17,7 @@ import ListBookings from './pages/admin/ListBookings'
 import { useAppContext } from './context/AppContext'
 import { SignIn } from '@clerk/clerk-react'
 import Loading from './components/Loading'
+import Upcoming from './pages/Upcoming'
 
 const App = () => {
   const isAdminRoute = useLocation().pathname.startsWith('/admin')
@@ -33,6 +34,7 @@ const App = () => {
       <Route path='/movies/:id' element={<MovieDetail />}/>
       <Route path='/movies/:id/:date' element={<SeatLayout />}/>
       <Route path='/my-bookings' element={<MyBooking />}/>
+      <Route path='/upcoming' element={<Upcoming />}/>
       <Route path='/loading/:nextUrl' element={<Loading />}/>
       <Route path='/favourite' element={<Favourite />}/>
       <Route path='/admin/*' 

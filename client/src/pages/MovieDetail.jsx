@@ -98,7 +98,7 @@ const MovieDetail = () => {
       <DateBox dateTime={dateTime} id={id}/>
 
       <h3 className='font-semibold text-xl mt-40 max-md:text-md'>You Might Also Like</h3>
-      <div className='flex justify-between gap-4 mt-10 flex-wrap max-lg:justify-center'>
+      <div className='flex gap-4 mt-10 flex-wrap max-lg:justify-center'>
         {shows.slice(0,4).map((movie,index) => {
           return <MovieCard key={index} movie={movie}/>
         })}

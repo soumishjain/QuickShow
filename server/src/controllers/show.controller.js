@@ -22,6 +22,20 @@ export const getNowPlayingMovies = async (req,res) => {
     }
 }
 
+export const getUpcomingMovies = async(req,res) => {
+    try{
+        const {data} = await axios.get('https://api.themoviedb.org/3/movie/upcoming',{
+            headers : {Authorization : `Bearer ${process.env.TMDB_API_KEY}`}
+        })
+
+        const movies = data.results
+        res.json({success : true, movies : movies})
+    }catch(err){
+        console.log(err)
+        res.json({success : false,message : err.message})
+    }
+}
+
 export const addShow = async (req,res) => {
     try{
         const {movieId , showsInput,showPrice} = req.body
@@ -49,7 +63,7 @@ export const addShow = async (req,res) => {
             poster_path : movieApiData.poster_path,
             backdrop_path : movieApiData.backdrop_path,
             genres : movieApiData.genres,
-            casts : creditsApiData.casts,
+            casts : creditsApiData.cast,
             release_date : movieApiData.release_date,
             original_language : movieApiData.original_language,
             tagline : movieApiData.tagline || "",
