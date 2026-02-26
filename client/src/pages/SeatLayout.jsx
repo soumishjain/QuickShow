@@ -116,7 +116,7 @@ console.log("Sending showId:", selectedTime?.showId)
   },[selectedTime])
 
   return show ? (
-    <div className='overflow-x-auto scroll-smooth'>
+    <div className='overflow-x-auto scroll-smooth no-scrollbar'>
       <div className='min-w-[1100px] flex gap-5 px-6 py-30'>
       <div className='flex flex-col gap-5 border border-primary/20 rounded-lg h-max w-60 py-10 bg-primary/20'>
           <p className='text-lg max-md:text-center font-semibold px-6'>Available Timings</p>
