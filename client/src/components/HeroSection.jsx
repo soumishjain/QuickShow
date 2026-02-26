@@ -1,30 +1,98 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
-import { ArrowRight, Calendar1Icon, CircleArrowOutUpRight, ClockIcon } from 'lucide-react'
+import { ArrowRight, Calendar1Icon, ChevronLeft, ChevronRight, CircleArrowOutUpRight, ClockIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useAppContext } from '../context/AppContext'
 const HeroSection = () => {
     const navigate = useNavigate()
+
+    const [current , setCurrent] = useState(0)
+
+    const {shows , image_base_url} = useAppContext()
+
+    useEffect(() => {
+      if(!shows.length) return;
+      const interval = setInterval(() => {
+        setCurrent(prev => (prev + 1) % shows.length)
+      },5000 )
+
+      return () => clearInterval(interval)
+    },[shows])
+
+    const handlePrev = () => {
+      setCurrent(prev => (prev == 0 ? shows.length - 1 : prev - 1))
+    }
+
+     const handleNext = () => {
+    setCurrent(prev => (prev + 1) % shows.length)
+  }
+
+    const movie = shows[current]
+
+
+
+
   return (
-    <div className='bg-[url("/backgroundImage.png")]  min-h-screen bg-center bg-cover px-6 md:px-16 lg:px-36 '>
-        <div className="absolute bottom-0 left-0 w-full h-42 bg-gradient-to-t 
-                from-black via-black/40 to-transparent 
-                pointer-events-none"> </div>
-       <div className='flex flex-col gap-4 max-sm:w-80 w-120'>
-         <img className='mt-50 md:w-40 max-md:w-30' src={assets.marvelLogo} alt="" />
-        <h1 className='max-md:text-4xl md:text-6xl font-semibold max-w-100'>Guardian <br /> of the Galaxy</h1>
-        <div className='flex gap-2 max-md:text-md flex-wrap'>
-            <p>Action | </p>
-            <p>Adventure | </p>
-            <p>Scifi</p>
-            <p className='flex gap-2'><Calendar1Icon className='h-5 w-5' /> 2018</p>
-            <p className='flex gap-2'><ClockIcon /> 2h 8m</p>
-      </div>
-      <p className='max-md:text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut necessitatibus nesciunt autem, assumenda porro fuga cupiditate quisquam et sunt quam? Explicabo deserunt similique at, culpa sequi in vitae numquam voluptate!</p>
-            <button onClick={() => navigate('/movies')} className='group mt-2 flex bg-primary hover:bg-primary-dull flex-1 rounded-full px-4 py-2 w-fit'>
-                <span className='group-hover:-translate-x-1 transition-transform duration-300'>Explore Movies</span>
-                <ArrowRight className='group-hover:translate-x-1 transition-transform duration-300'/>
-            </button>
-       </div>
+    <div
+      className="relative min-h-screen bg-center bg-cover transition-all duration-1000"
+      style={{
+        backgroundImage: movie
+          ? `url(${image_base_url}${movie.backdrop_path})`
+          : ''
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+
+      {/* Left Arrow */}
+      <button
+        onClick={handlePrev}
+        className="absolute left-5 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/80 p-3 rounded-full transition"
+      >
+        <ChevronLeft size={28} />
+      </button>
+
+      {/* Right Arrow */}
+      <button
+        onClick={handleNext}
+        className="absolute right-5 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/80 p-3 rounded-full transition"
+      >
+        <ChevronRight size={28} />
+      </button>
+
+      {movie && (
+        <div className="relative z-10 px-6 md:px-16 lg:px-36 pt-60 max-w-3xl text-white space-y-4">
+          <h1 className="text-4xl md:text-6xl font-bold">
+            {movie.title}
+          </h1>
+
+          <div className="flex gap-4 flex-wrap text-sm md:text-base">
+            <p className="flex items-center gap-1">
+              <Calendar1Icon size={18} />
+              {movie.release_date}
+            </p>
+
+            <p className="flex items-center gap-1">
+              <ClockIcon size={18} />
+              {Math.floor(movie.runtime / 60)}hr {movie.runtime % 60}min
+            </p>
+          </div>
+
+          <p className="text-sm md:text-base line-clamp-3">
+            {movie.overview}
+          </p>
+
+          <button
+            onClick={() => navigate('/movies')}
+            className="group mt-10 flex bg-primary hover:bg-primary-dull rounded-full px-6 py-3 w-fit"
+          >
+            <span className="group-hover:-translate-x-1 transition-transform duration-300">
+              Explore Movies
+            </span>
+            <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
+          </button>
+        </div>
+      )}
     </div>
   )
 }

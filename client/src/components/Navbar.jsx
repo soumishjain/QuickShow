@@ -23,8 +23,8 @@ const Navbar = () => {
             <XIcon onClick={() => setIsOpen(false)} className='md:hidden max-md:absolute top-3 right-7'/>
             <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/'>Home</NavLink>
             <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/movies'>Movies</NavLink>
-            <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/theatres'>Theatres</NavLink>
             <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/releases'>Releases</NavLink>
+            <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/my-bookings'>My Bookings</NavLink>
             {favoritesMovies.length > 0 && <NavLink className={({isActive}) => `${isActive ? 'text-primary underline' : ''}`} onClick={() => {scrollTo(0,0); setIsOpen(false)}} to='/favourite'>Favourites</NavLink>}
         </div>
 
