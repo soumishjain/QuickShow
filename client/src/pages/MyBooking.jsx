@@ -20,21 +20,49 @@ const MyBooking = () => {
         }
       })
       console.log(data.bookings)
-      if(data.success) setMyBookings(data.bookings)
-        setIsLoading(false)
+      if(data.success) setMyBookings(data.bookings || [])
     } catch(error){
   console.log(error)
+}finally{
+        setIsLoading(false)
+
 }
   }
 
   useEffect(() => {
-    if(user){
-      getMyBookings()
-    }
-    
-  },[user])
 
-  return !isLoading ? (
+ if(!user){
+  setIsLoading(false)
+  return;
+ }
+
+ let timeout = setTimeout(() => {
+  setIsLoading(false);
+ },5000)
+
+ getMyBookings()
+
+
+  return () => clearTimeout(timeout);
+}, [user]);
+
+
+  if(isLoading) {
+    return <Loading />
+  }
+
+  if(myBookings.length === 0){
+    return (
+    <div className="mt-40 text-center">
+      <h1 className="text-xl font-semibold">No Bookings Yet</h1>
+      <p className="text-white/40 mt-2">
+        Looks like you haven’t booked any movies.
+      </p>
+    </div>
+  )
+  }
+
+  return (
     <div className='relative mt-40 max-md:mt-30 md:px-60 max-md:px-10'>
       <BlurBg top='20px' left='80px'/>
       <BlurBg bottom='100px' right='200px'/>
@@ -64,7 +92,7 @@ const MyBooking = () => {
         ))}
       </div>
     </div>
-  ) : <Loading />
+  ) 
 }
 
 export default MyBooking

@@ -3,6 +3,7 @@ import { assets } from '../assets/assets'
 import { ArrowRight, Calendar1Icon, ChevronLeft, ChevronRight, CircleArrowOutUpRight, ClockIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
+import Loading from './Loading'
 const HeroSection = () => {
     const navigate = useNavigate()
 
@@ -32,7 +33,7 @@ const HeroSection = () => {
 
 
 
-  return (
+  return shows.length > 0 ? (
     <div
       className="relative min-h-screen bg-center bg-cover transition-all duration-1000"
       style={{
@@ -94,7 +95,7 @@ const HeroSection = () => {
         </div>
       )}
     </div>
-  )
+  ) : <Loading />
 }
 
 export default HeroSection

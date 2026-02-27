@@ -21,7 +21,6 @@ const UpcomingMovieCard = ({movie}) => {
        </span> 
        </div>
       </div>
-        
      </div>
    )
 }

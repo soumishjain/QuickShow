@@ -2,6 +2,7 @@ import React from 'react'
 import MovieCard from '../components/MovieCard'
 import BlurBg from '../components/BlurBg'
 import { useAppContext } from '../context/AppContext'
+import Loading from '../components/Loading'
 const Movies = () => {
 
 
@@ -19,9 +20,7 @@ const Movies = () => {
     </div>
       </div>
   ) : (
-    <div>
-      <h2>No Movies Available</h2>
-    </div>
+   <Loading />
   )
 }
 
