@@ -14,6 +14,7 @@ const DateBox = ({dateTime , id}) => {
       return toast('Please Select a Date')
     }
     navigate(`/movies/${id}/${selected}`)
+    scrollTo(0,0)
   }
 
   return (

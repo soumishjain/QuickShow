@@ -14,7 +14,7 @@ import { useAppContext } from '../context/AppContext';
 
    return (
      <div onClick={() => {
-      navigate(`/movies/${movie.id}`)
+      navigate(`/movies/${movie.id}`); scrollTo(0,0)
      }} className='cursor-pointer hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between h-100 w-68 bg-primary/10 border-2 border-primary/20 rounded-2xl p-3'>
       <div>
          <img className='rounded-2xl object-cover object-center h-50' src={image_base_url + movie.backdrop_path} alt="" />
@@ -26,7 +26,7 @@ import { useAppContext } from '../context/AppContext';
         <div className='flex justify-between'>
             <button onClick={() => {
                 navigate(`/movies/${movie.id}`); scrollTo(0,0)
-            }} className='bg-primary font-semibold hover:bg-primary-dull px-2 py-1 rounded-full  '>Buy Ticket</button>
+            }} className='bg-primary cursor-pointer font-semibold hover:bg-primary-dull px-2 py-1 rounded-full  '>Buy Ticket</button>
             <span className='flex gap-1'><StarIcon fill='currentColor' className='h-5 text-primary w-5'/> {movie.vote_average.toFixed(1)} </span>
         </div>
      </div>
